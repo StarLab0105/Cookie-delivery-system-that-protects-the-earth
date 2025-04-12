@@ -1,50 +1,93 @@
-# 운송수단별 탄소배출량 (kg CO2/km)
-transport_emissions = {
-    "트럭": 0.2,
-    "선박": 0.015,
-    "항공기": 0.5,
-    "전기차": 0.05
+import math
+
+# 운송수단별 CO₂ 배출 계수 (kgCO₂/km)
+transport_emission_factors = {
+    "truck": 0.2,
+    "ship": 0.015,
+    "airplane": 0.5,
+    "electric_car": 0.05
 }
 
-# 포장재별 탄소배출량 (kg CO2/1개)
-package_emissions = {
-    "비닐": 0.1,
-    "종이": 0.05,
-    "재활용 종이": 0.02,
-    "식물성 포장": 0.01
+# 포장재별 CO₂ 배출 계수 (kgCO₂/package)
+packaging_emission_factors = {
+    "plastic": 0.2,
+    "paper": 0.1,
+    "recycled_paper": 0.05
 }
 
-# 탄소 배출량 계산 함수
-def calculate_emissions(distance_km, transport_type, package_type):
-    if transport_type not in transport_emissions:
-        raise ValueError("운송수단을 잘못 입력했습니다.")
-    if package_type not in package_emissions:
-        raise ValueError("포장재를 잘못 입력했습니다.")
+# 샘플 도시의 위도/경도 (임의)
+locations = {
+    "seoul": (37.5665, 126.9780),
+    "busan": (35.1796, 129.0756),
+    "newyork": (40.7128, -74.0060),
+    "tokyo": (35.6895, 139.6917),
+    "berlin": (52.5200, 13.4050)
+}
 
-    transport_emission = transport_emissions[transport_type]
-    package_emission = package_emissions[package_type]
-    
-    total_emission = distance_km * transport_emission + package_emission
-    return round(total_emission, 4)
+# haversine 거리 계산
+def calculate_distance(coord1, coord2):
+    R = 6371  # 지구 반지름 (km)
+    lat1, lon1 = coord1
+    lat2, lon2 = coord2
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
 
-# 🌱 친환경 점수 시스템
-def get_eco_score(emission):
-    if emission < 1:
-        return "🌟 매우 친환경적 (Eco Score: A)"
-    elif emission < 5:
-        return "👍 보통 (Eco Score: B)"
-    else:
-        return "⚠️ 개선 필요 (Eco Score: C)"
+    a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
-# 🔁 시뮬레이션 예시
+    return R * c
+
+# 점수 계산
+def calculate_eco_score(transport_emission, packaging_emission):
+    total_emission = transport_emission + packaging_emission
+    eco_score = max(0, 100 - int(total_emission * 10))
+    return total_emission, eco_score
+
+# 사용자 입력
+def run_simulation():
+    print("🚚 에코 쿠키 배송 시뮬레이터 🌱")
+    print("사용 가능한 도시:", list(locations.keys()))
+
+    origin = input("출발지(공장 위치): ").lower()
+    destination = input("배송지(고객 위치): ").lower()
+
+    transport = input("운송수단 (truck, ship, airplane, electric_car): ").lower()
+    packaging = input("포장재 (plastic, paper, recycled_paper): ").lower()
+
+    if origin not in locations or destination not in locations:
+        print("⚠️ 유효하지 않은 도시명입니다.")
+        return
+
+    if transport not in transport_emission_factors:
+        print("⚠️ 유효하지 않은 운송수단입니다.")
+        return
+
+    if packaging not in packaging_emission_factors:
+        print("⚠️ 유효하지 않은 포장재입니다.")
+        return
+
+    distance = calculate_distance(locations[origin], locations[destination])
+    transport_emission = distance * transport_emission_factors[transport]
+    packaging_emission = packaging_emission_factors[packaging]
+
+    total_emission, eco_score = calculate_eco_score(transport_emission, packaging_emission)
+
+    print("\n📦 배송 결과:")
+    print(f"  - 거리: {distance:.2f} km")
+    print(f"  - 운송 탄소 배출: {transport_emission:.3f} kgCO₂")
+    print(f"  - 포장 탄소 배출: {packaging_emission:.3f} kgCO₂")
+    print(f"  ✅ 총 탄소 배출량: {total_emission:.3f} kgCO₂")
+    print(f"  🌿 친환경 점수: {eco_score}/100")
+
+    if eco_score < 70:
+        print("⚠️ 더 친환경적인 선택을 고려해보세요!")
+        if transport != "electric_car":
+            print("  👉 전기차를 선택하면 탄소를 크게 줄일 수 있어요!")
+        if packaging != "recycled_paper":
+            print("  👉 재활용 종이를 사용해보는 건 어때요?")
+
+# 실행
 if __name__ == "__main__":
-    # 예시 데이터
-    distance = 1200  # km
-    transport = "선박"
-    packaging = "재활용 종이"
-
-    emission = calculate_emissions(distance, transport, packaging)
-    score = get_eco_score(emission)
-
-    print(f"총 탄소배출량: {emission} kg CO2")
-    print(f"친환경 점수: {score}")
+    run_simulation()
