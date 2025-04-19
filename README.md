@@ -4,10 +4,10 @@
 최대한 적은 탄소배출량으로 쿠키를 전 세계에 배송하는 에코 물류 시스템을 설계하고 시뮬레이션하는 프로젝트.
 
 # 🧠 핵심 아이디어
-- 쿠키 공장(출발지)와 배송지(고객 위치)를 선택.
-- 배송 시 사용 가능한 운송수단(트럭, 배, 항공기, 전기차 등)과 포장재(플라스틱, 종이, 재활용 종이 등)를 선택.
-- 운송거리, 운송수단, 포장재에 따라 탄소배출량 계산.
-- 사용자가 더 “친환경적인 선택”을 하도록 유도하기.
+쿠키 공장(출발지)와 배송지(고객 위치)를 선택.
+배송 시 사용 가능한 운송수단(트럭, 배, 항공기, 전기차 등)과 포장재(플라스틱, 종이, 재활용 종이 등)를 선택.
+운송거리, 운송수단, 포장재에 따라 탄소배출량 계산.
+사용자가 더 “친환경적인 선택”을 하도록 유도하기.
 
 # 💡 기능 아이디어
 **기능	설명**
@@ -19,7 +19,14 @@
 5. 🏆 친환경 점수 시스템	총점이 낮을수록 높은 친환경 점수 부여
 6. 🔁 다양한 시나리오	다양한 목적지/경로/물류 조건을 시도할 수 있게 반복 가능하게 설계
 
-# 🔢 예시 데이터 (탄소배출량 기준 예시)
-![image](https://github.com/user-attachments/assets/f32e92e9-346a-4b11-9de2-6a12a0ac9844)
+# 🔢 예시
+
+![image](https://github.com/user-attachments/assets/a4f2473b-ee33-4517-a415-98bcce78d69a)
+![image](https://github.com/user-attachments/assets/6b198a56-24da-4ec2-8133-95988b55618f)
+![image](https://github.com/user-attachments/assets/0401f0ca-c140-4596-a50e-68e0b8ef559e)
+![image](https://github.com/user-attachments/assets/38bdd311-49b9-42c2-88f3-27476ae8a98c)
+![image](https://github.com/user-attachments/assets/9e2a1172-b25b-476d-95c9-ad5819dd3c7b)
+
+
 
 **프로젝트 인원 ( 이동혁 , 최영재 )**
