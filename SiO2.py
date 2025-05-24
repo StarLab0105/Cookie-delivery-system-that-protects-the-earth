@@ -5,7 +5,7 @@ transport_emission_factors = {
     "truck": 0.2,
     "ship": 0.015,
     "airplane": 0.5,
-    "electric_car": 0.05,
+    "electric car": 0.05,
     "bicycle Electric" : 0.005,
     "hydrogen car" : 0.25,
     "hydrogen truck" : 0.15 
