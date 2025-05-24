@@ -2,6 +2,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 # 디버깅을 통한 오류잡기 필요
+# 첫번째 데이터 덤핑 오류
 
 # 운송수단별 CO₂ 배출 계수 (kgCO₂/km)
 transport_emission_factors = {
