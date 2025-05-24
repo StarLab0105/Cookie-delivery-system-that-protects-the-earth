@@ -99,7 +99,7 @@ def run_simulation():
     y1 = np.cos(2 * np.pi * x1) * np.exp(-x1)
     y2 = np.cos(2 * np.pi * x2)
 
-    plt.subplot(2, 1, 1)                # nrows=2, ncols=1, index=1
+    plt.subplot(2, 1, 1)
     y = np.arange(3)
     Type = ['transport_emission', 'packaging_emission', 'total_emission']
     values = [transport_emission,packaging_emission,total_emission]
