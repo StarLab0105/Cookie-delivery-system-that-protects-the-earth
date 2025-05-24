@@ -1,11 +1,13 @@
 import math
+import matplotlib.pyplot as plt
+import numpy as np
 
 # 운송수단별 CO₂ 배출 계수 (kgCO₂/km)
 transport_emission_factors = {
     "truck": 0.2,
     "ship": 0.015,
     "airplane": 0.5,
-    "electric car": 0.05,
+    "electric_car": 0.05,
     "bicycle Electric" : 0.005,
     "hydrogen car" : 0.25,
     "hydrogen truck" : 0.15 
@@ -90,6 +92,29 @@ def run_simulation():
     print(f"  - 포장 탄소 배출: {packaging_emission:.3f} kgCO₂")
     print(f"  ✅ 총 탄소 배출량: {total_emission:.3f} kgCO₂")
     print(f"  🌿 친환경 점수: {eco_score}/100")
+
+    x1 = np.linspace(0.0, 5.0)
+    x2 = np.linspace(0.0, 2.0)
+
+    y1 = np.cos(2 * np.pi * x1) * np.exp(-x1)
+    y2 = np.cos(2 * np.pi * x2)
+
+    plt.subplot(2, 1, 1)                # nrows=2, ncols=1, index=1
+    y = np.arange(3)
+    Type = ['transport_emission', 'packaging_emission', 'total_emission']
+    values = [transport_emission,packaging_emission,total_emission]
+    colors = ['y', 'dodgerblue', 'C2']
+    plt.barh(y, values, color=colors,height=0.4)
+    plt.yticks(y, Type)
+
+    plt.subplot(2, 1, 2)           
+    ratio = [ 100-eco_score,eco_score]
+    labels = ['BAD_eco_score','GOOD_eco_score']
+    explode = [0.1, 0.1]
+    colors = ['#ff9999', '#8fd9b6']
+    plt.pie(ratio, labels=labels, autopct='%.1f%%', startangle=260, counterclock=False, explode=explode, shadow=True, colors=colors)
+    plt.tight_layout()
+    plt.show()
 
     if eco_score < 70:
         print("⚠️ 더 친환경적인 선택을 고려해보세요!")
