@@ -5,14 +5,22 @@ transport_emission_factors = {
     "truck": 0.2,
     "ship": 0.015,
     "airplane": 0.5,
-    "electric_car": 0.05
+    "electric_car": 0.05,
+    "bicycle Electric" : 0.005,
+    "hydrogen car" : 0.25,
+    "hydrogen truck" : 0.15 
 }
 
 # 포장재별 CO₂ 배출 계수 (kgCO₂/package)
 packaging_emission_factors = {
     "plastic": 0.2,
     "paper": 0.1,
-    "recycled_paper": 0.05
+    "recycled paper": 0.05,
+    "wooden" : 0.15,
+    "vinyl" : 0.05,
+    "iron" : 0.35,
+    "glass" : 0.05,
+    "styrofoam" : 0.25
 }
 
 # 샘플 도시의 위도/경도 (임의)
@@ -21,7 +29,9 @@ locations = {
     "busan": (35.1796, 129.0756),
     "newyork": (40.7128, -74.0060),
     "tokyo": (35.6895, 139.6917),
-    "berlin": (52.5200, 13.4050)
+    "berlin": (52.5200, 13.4050),
+    "washington DC" : (45,116),
+    "paris" : (48,2)
 }
 
 # haversine 거리 계산
@@ -42,7 +52,7 @@ def calculate_distance(coord1, coord2):
 # 점수 계산
 def calculate_eco_score(transport_emission, packaging_emission):
     total_emission = transport_emission + packaging_emission
-    eco_score = max(0, 100 - int(total_emission * 10))
+    eco_score = max(0, 100 - int(total_emission * 7.00))
     return total_emission, eco_score
 
 # 사용자 입력
@@ -53,8 +63,8 @@ def run_simulation():
     origin = input("출발지(공장 위치): ").lower()
     destination = input("배송지(고객 위치): ").lower()
 
-    transport = input("운송수단 (truck, ship, airplane, electric_car): ").lower()
-    packaging = input("포장재 (plastic, paper, recycled_paper): ").lower()
+    transport = input("운송수단 (truck, ship, airplane, electric_car, bicycle Electric, hydrogen car,hydrogen truck): ").lower()
+    packaging = input("포장재 (plastic, paper, recycled_paper, wooden, vinyl, iron, glass, styrofoam): ").lower()
 
     if origin not in locations or destination not in locations:
         print("⚠️ 유효하지 않은 도시명입니다.")
