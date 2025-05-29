@@ -2,7 +2,8 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-# 오류 해결 >>> 시각화 필요
+# 시각화 완료 >>> 환경점수 데이터 표기 방법 . . ?
+# CO₂ 배출 계수 조율 . . ?
 
 # 운송수단별 CO₂ 배출 계수 (kgCO₂/km)
 transport_emission_factors = {
