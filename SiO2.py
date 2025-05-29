@@ -1,6 +1,8 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+# 오류 해결 >>> 시각화 필요
 
 # 운송수단별 CO₂ 배출 계수 (kgCO₂/km)
 transport_emission_factors = {
@@ -15,14 +17,14 @@ transport_emission_factors = {
 
 # 포장재별 CO₂ 배출 계수 (kgCO₂/package)
 packaging_emission_factors = {
-    "plastic": 0.2,
-    "paper": 0.1,
-    "recycled paper": 0.05,
-    "wooden" : 0.15,
-    "vinyl" : 0.05,
-    "iron" : 0.35,
-    "glass" : 0.05,
-    "styrofoam" : 0.25
+    "plastic": 30,
+    "paper": 15,
+    "recycled paper": 7.5,
+    "wooden" : 7.5,
+    "vinyl" : 6,
+    "iron" : 35,
+    "glass" : 25,
+    "styrofoam" : 40
 }
 
 # 샘플 도시의 위도/경도 (임의)
@@ -52,23 +54,27 @@ def calculate_distance(coord1, coord2):
     return R * c
 
 # 점수 계산
-def calculate_eco_score(transport_emission, packaging_emission):
+def calculate_eco_score(transport_emission, packaging_emission,distance):
     total_emission = transport_emission + packaging_emission
-    eco_score = max(0, 100 - int(total_emission * 7.00))
+    emsision_per = distance / total_emission
+    eco_score = max(0, 100 - int(emsision_per))
     return total_emission, eco_score
 
 # 사용자 입력
 def run_simulation():
     print("🚚 에코 쿠키 배송 시뮬레이터 🌱")
     print("사용 가능한 도시:", list(locations.keys()))
-
+    locations_caculate = ["seoul","busan","newyork","tokyo","berlin","washington DC","paris"]
+    distance_list = []
+    city_list = []
+    transport_emission_list =[]
+    total_emission_list = [0] * 6
+    eco_score_list = [0] * 6
     origin = input("출발지(공장 위치): ").lower()
-    destination = input("배송지(고객 위치): ").lower()
-
     transport = input("운송수단 (truck, ship, airplane, electric_car, bicycle Electric, hydrogen car,hydrogen truck): ").lower()
     packaging = input("포장재 (plastic, paper, recycled_paper, wooden, vinyl, iron, glass, styrofoam): ").lower()
 
-    if origin not in locations or destination not in locations:
+    if origin not in locations not in locations:
         print("⚠️ 유효하지 않은 도시명입니다.")
         return
 
@@ -80,49 +86,36 @@ def run_simulation():
         print("⚠️ 유효하지 않은 포장재입니다.")
         return
 
-    distance = calculate_distance(locations[origin], locations[destination])
-    transport_emission = distance * transport_emission_factors[transport]
+    for i in locations_caculate:
+        if i == origin:
+            continue
+        else:
+            distance = (calculate_distance(locations[origin], locations[i]))
+            city_list.append(i)
+            distance_list.append(distance)
+    for i in range(0,6):
+        transport_emission= distance_list[i] * transport_emission_factors[transport]
+        transport_emission_list.append(transport_emission)
     packaging_emission = packaging_emission_factors[packaging]
-
-    total_emission, eco_score = calculate_eco_score(transport_emission, packaging_emission)
-
-    print("\n📦 배송 결과:")
-    print(f"  - 거리: {distance:.2f} km")
-    print(f"  - 운송 탄소 배출: {transport_emission:.3f} kgCO₂")
-    print(f"  - 포장 탄소 배출: {packaging_emission:.3f} kgCO₂")
-    print(f"  ✅ 총 탄소 배출량: {total_emission:.3f} kgCO₂")
-    print(f"  🌿 친환경 점수: {eco_score}/100")
-
-    x1 = np.linspace(0.0, 5.0)
-    x2 = np.linspace(0.0, 2.0)
-
-    y1 = np.cos(2 * np.pi * x1) * np.exp(-x1)
-    y2 = np.cos(2 * np.pi * x2)
-
-    plt.subplot(2, 1, 1)
-    y = np.arange(3)
-    Type = ['transport_emission', 'packaging_emission', 'total_emission']
-    values = [transport_emission,packaging_emission,total_emission]
-    colors = ['y', 'dodgerblue', 'C2']
-    plt.barh(y, values, color=colors,height=0.4)
-    plt.yticks(y, Type)
-
-    plt.subplot(2, 1, 2)           
-    ratio = [ 100-eco_score,eco_score]
-    labels = ['BAD_eco_score','GOOD_eco_score']
-    explode = [0.1, 0.1]
-    colors = ['#ff9999', '#8fd9b6']
-    plt.pie(ratio, labels=labels, autopct='%.1f%%', startangle=260, counterclock=False, explode=explode, shadow=True, colors=colors)
-    plt.tight_layout()
+    for i in range(0,6):
+        total_emission_list[i], eco_score_list[i] = calculate_eco_score(transport_emission_list[i], packaging_emission,distance_list[i])
+    print("\n\n")
+    print("전체 탄소 배출량",total_emission_list)
+    print("친환경 점수",eco_score_list)
+    print("포장지 배출량",packaging_emission)
+    print("운송수단 배출량",transport_emission_list)
+    print("거리 목록",distance_list)
+    print("도시목록",city_list)
+    Title = "Origin : {} \n Transport : {} \n Packaging : {}".format(origin,transport,packaging)
+    p1 = plt.bar(city_list, transport_emission_list, color='red', alpha=0.7, label='transport_emission')
+    p2 = plt.bar(city_list, packaging_emission, color='blue', alpha=0.7, bottom=transport_emission_list, label='packaging_emission')
+    plt.title(Title)
+    plt.xlabel("City", labelpad=20)
+    plt.ylabel("Total emission (kg CO2)", labelpad=-1)
+    plt.legend(frameon=True, shadow=True, facecolor='inherit', edgecolor='green', borderpad=0.8, labelspacing=1.1)
     plt.show()
 
-    if eco_score < 70:
-        print("⚠️ 더 친환경적인 선택을 고려해보세요!")
-        if transport != "electric_car":
-            print("  👉 전기차를 선택하면 탄소를 크게 줄일 수 있어요!")
-        if packaging != "recycled_paper":
-            print("  👉 재활용 종이를 사용해보는 건 어때요?")
-
+ 
 # 실행
 if __name__ == "__main__":
     run_simulation()
