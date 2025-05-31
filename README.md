@@ -21,8 +21,10 @@
 
 #### 🔢 예시
 
-![image](https://github.com/user-attachments/assets/af1e29ab-becf-4b9f-a021-25ca84d6e4f4)
+![image|400](https://github.com/user-attachments/assets/af1e29ab-becf-4b9f-a021-25ca84d6e4f4)
 
+
+출처: https://developnote.tistory.com/75 [?:티스토리]
 ---
 ## Installation Guide
 파이썬 판다스(pandas) 설치하는 방법\
