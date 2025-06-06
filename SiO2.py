@@ -2,8 +2,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-# 시각화 완료 >>> 환경점수 데이터 표기 방법 . . ?
-# CO₂ 배출 계수 조율 . . ?
+# 오류 해결 >>> 시각화 필요
 
 # 운송수단별 CO₂ 배출 계수 (kgCO₂/km)
 transport_emission_factors = {
@@ -59,7 +58,8 @@ def calculate_eco_score(transport_emission, packaging_emission,distance):
     total_emission = transport_emission + packaging_emission
     emsision_per = distance / total_emission
     eco_score = max(0, 100 - int(emsision_per))
-    return total_emission, eco_score
+    Cost_C_score = distance * 0.015 + eco_score * 0.3
+    return total_emission,Cost_C_score
 
 # 사용자 입력
 def run_simulation():
@@ -102,7 +102,7 @@ def run_simulation():
         total_emission_list[i], eco_score_list[i] = calculate_eco_score(transport_emission_list[i], packaging_emission,distance_list[i])
     print("\n\n")
     print("전체 탄소 배출량",total_emission_list)
-    print("친환경 점수",eco_score_list)
+    print("탄소 비용 점수",eco_score_list)
     print("포장지 배출량",packaging_emission)
     print("운송수단 배출량",transport_emission_list)
     print("거리 목록",distance_list)
@@ -114,6 +114,7 @@ def run_simulation():
     plt.xlabel("City", labelpad=20)
     plt.ylabel("Total emission (kg CO2)", labelpad=-1)
     plt.legend(frameon=True, shadow=True, facecolor='inherit', edgecolor='green', borderpad=0.8, labelspacing=1.1)
+
     plt.show()
 
  
